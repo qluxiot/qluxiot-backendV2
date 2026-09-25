@@ -15,7 +15,8 @@ async function bootstrap() {
     'http://localhost:4200',        // Angular dev server
     'http://qluxiotsystem.com',     // Your production frontend domain (HTTP)
     'https://qluxiotsystem.com',    // Your production frontend domain (HTTPS)
-    'https://qconnect-qlux.netlify.app', // Netlify domain
+    'https://qconnect-qlux.netlify.app', // Old Netlify domain
+    'https://qconnect-qluxv2.netlify.app', // New Netlify domain
   ];
   app.enableCors({
     origin: (origin, callback) => {
