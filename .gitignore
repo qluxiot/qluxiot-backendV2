@@ -1,0 +1,58 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.development
+.env.production
+.env.local
+.env.test
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# Compiled output
+dist/
+build/
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+
+# Databases / SQLite
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# Test coverage
+coverage/
+
+# OS / System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs / Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Temporary files
+*.tmp
+temp/
+
+files/auth-info-baileys/
+
