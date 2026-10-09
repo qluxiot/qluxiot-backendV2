@@ -19,6 +19,7 @@ import { AlarmsModule } from './alarms/alarms.module';
 import { NotificationSetupModule } from './notification-setup/notification-setup.module';
 import { BertamModule } from './bertam/bertam.module';
 import { Uc100Module } from './uc100/uc100.module';
+import { CctvModule } from './cctv/cctv.module';
 
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -54,6 +55,7 @@ import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
     NotificationSetupModule,
     BertamModule,
     Uc100Module,
+    CctvModule,
   ],
   controllers: [AppController],
   providers: [
