@@ -1,3 +1,18 @@
+/**
+ * // Dear programmer:
+ * // When I wrote this code, only god and
+ * // I knew how it worked.
+ * // Now, only god knows it!
+ * //
+ * // Therefore, if you are trying to optimize
+ * // this routine and it fails (most surely),
+ * // please increase this counter as a
+ * // warning for the next person:
+ * //
+ * // total_hours_wasted_here = 254
+ * //
+ */
+
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
@@ -20,6 +35,8 @@ import { NotificationSetupModule } from './notification-setup/notification-setup
 import { BertamModule } from './bertam/bertam.module';
 import { Uc100Module } from './uc100/uc100.module';
 import { CctvModule } from './cctv/cctv.module';
+import { EnvironmentalModule } from './environmental/environmental.module';
+import { PanicButtonModule } from './panic-button/panic-button.module';
 
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -56,6 +73,8 @@ import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
     BertamModule,
     Uc100Module,
     CctvModule,
+    EnvironmentalModule,
+    PanicButtonModule,
   ],
   controllers: [AppController],
   providers: [
