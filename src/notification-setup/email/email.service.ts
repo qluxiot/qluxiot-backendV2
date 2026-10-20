@@ -8,15 +8,18 @@ export class EmailService {
   private transporter: nodemailer.Transporter;
 
   constructor(private readonly config: ConfigService) {
-    const port = this.config.get<number>('EMAIL_PORT');
+    const port = Number(this.config.get('EMAIL_PORT')) || 587;
     this.transporter = nodemailer.createTransport({
       host: this.config.get<string>('EMAIL_HOST'),
       port: port,
-      secure: port == 465, // Use true for 465, false for 587 (STARTTLS)
+      secure: port === 465, // Use true for 465, false for 587 (STARTTLS)
       auth: {
         user: this.config.get<string>('EMAIL_USER'),
         pass: this.config.get<string>('EMAIL_PASS'),
       },
+      connectionTimeout: 20000,
+      greetingTimeout: 15000,
+      socketTimeout: 30000,
     });
   }
 
