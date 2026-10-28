@@ -43,7 +43,7 @@ export class SolarDevicesService {
     return this.repo.find({ 
       where, 
       order: { created_datetime: 'DESC' },
-      relations: { project: true, schedule_profile: true }
+      relations: { project: true, schedule_profile: true, schedule_assigned_by: true }
     });
   }
 

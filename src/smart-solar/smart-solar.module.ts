@@ -20,9 +20,17 @@ import { SolarSchedulesService } from './services/solar-schedules.service';
 import { NengjiaModule } from '../nengjia/nengjia.module';
 import { AlarmsModule } from '../alarms/alarms.module';
 import { AuthModule } from '../auth/auth.module';
+import { NotificationSetupModule } from '../notification-setup/notification-setup.module';
+import { User } from '../users/entities/user.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([SolarDevice, TelemetryHistory, SolarScheduleProfile, SolarDailyStats]), NengjiaModule, AlarmsModule, AuthModule],
+  imports: [
+    TypeOrmModule.forFeature([SolarDevice, TelemetryHistory, SolarScheduleProfile, SolarDailyStats, User]),
+    NengjiaModule,
+    AlarmsModule,
+    AuthModule,
+    NotificationSetupModule,
+  ],
   controllers: [
     SolarDevicesController,
     SolarDashboardController,

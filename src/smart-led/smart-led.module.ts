@@ -14,13 +14,16 @@ import { LedSchedulesController } from './controllers/led-schedules.controller';
 import { GuangmangModule } from '../guangmang/guangmang.module';
 import { AlarmsModule } from '../alarms/alarms.module';
 import { AuthModule } from '../auth/auth.module';
+import { NotificationSetupModule } from '../notification-setup/notification-setup.module';
+import { User } from '../users/entities/user.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([LedDevice, LedTelemetryHistory, LedScheduleProfile, LedDailyStats]),
+    TypeOrmModule.forFeature([LedDevice, LedTelemetryHistory, LedScheduleProfile, LedDailyStats, User]),
     GuangmangModule,
     AlarmsModule,
     AuthModule,
+    NotificationSetupModule,
   ],
   providers: [
     LedDevicesService,

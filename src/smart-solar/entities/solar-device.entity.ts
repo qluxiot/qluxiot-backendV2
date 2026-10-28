@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { SolarScheduleProfile } from './solar-schedule-profile.entity';
 import { Project } from '../../projects/entities/project.entity';
+import { User } from '../../users/entities/user.entity';
 
 @Entity('solar_devices')
 export class SolarDevice {
@@ -95,6 +96,13 @@ export class SolarDevice {
   @ManyToOne(() => SolarScheduleProfile, profile => profile.devices, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'schedule_profile_id' })
   schedule_profile: SolarScheduleProfile | null;
+
+  @Column({ type: 'timestamptz', nullable: true })
+  schedule_assigned_at: Date | null;
+
+  @ManyToOne(() => User, { nullable: true, onDelete: 'SET NULL', eager: true })
+  @JoinColumn({ name: 'schedule_assigned_by_id' })
+  schedule_assigned_by: User | null;
 
   @ManyToOne(() => Project, { nullable: true, onDelete: 'SET NULL', eager: true })
   @JoinColumn({ name: 'project_id' })

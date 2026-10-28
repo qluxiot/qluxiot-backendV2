@@ -27,7 +27,7 @@ export class LedDevicesService {
     return this.deviceRepository.find({ 
       where,
       order: { updated_at: 'DESC' },
-      relations: { schedule_profile: true, project: true }
+      relations: { schedule_profile: true, schedule_assigned_by: true, project: true }
     });
   }
 

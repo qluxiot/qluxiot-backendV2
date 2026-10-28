@@ -1,6 +1,7 @@
 
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { LedDevice } from './led-device.entity';
+import { User } from '../../users/entities/user.entity';
 
 @Entity('led_schedule_profiles')
 export class LedScheduleProfile {
@@ -20,6 +21,14 @@ export class LedScheduleProfile {
 
   @UpdateDateColumn({ type: 'timestamptz' })
   updated_at: Date;
+
+  @ManyToOne(() => User, { nullable: true, onDelete: 'SET NULL', eager: true })
+  @JoinColumn({ name: 'created_by_id' })
+  created_by: User | null;
+
+  @ManyToOne(() => User, { nullable: true, onDelete: 'SET NULL', eager: true })
+  @JoinColumn({ name: 'updated_by_id' })
+  updated_by: User | null;
 
   @OneToMany(() => LedDevice, device => device.schedule_profile)
   devices: LedDevice[];
