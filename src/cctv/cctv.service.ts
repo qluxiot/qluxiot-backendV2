@@ -23,7 +23,7 @@ export class CctvService {
   constructor(private configService: ConfigService) {}
 
   getCameras(): CctvCamera[] {
-    const defaultStreamUrl = this.configService.get<string>('CCTV_DEFAULT_STREAM_URL') || 'http://localhost:8889/cctv_main/';
+    const defaultStreamUrl = this.configService.get<string>('CCTV_DEFAULT_STREAM_URL') || 'http://118.107.200.126:8889/cctv_main/';
 
     return [
       {
