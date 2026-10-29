@@ -32,7 +32,7 @@ export class PanicButtonService implements OnModuleInit, OnModuleDestroy {
     lastChecked: 'Just now',
     signalStrength: 5,
     rtspUrl: `rtsp://192.168.155.241:554`,
-    webrtcUrl: `http://118.107.200.126:8889/panic_button/`,
+    webrtcUrl: `https://mortgage-engaged-transmission-rep.trycloudflare.com/panic_button/`,
   };
 
   private events: PanicButtonEvent[] = [];
