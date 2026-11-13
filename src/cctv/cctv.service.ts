@@ -6,6 +6,8 @@ export interface CctvCamera {
   name: string;
   location: string;
   poleId: string;
+  projectId?: number | null;
+  projectName?: string;
   isOnline: boolean;
   resolution: string;
   fps: number;
@@ -29,8 +31,10 @@ export class CctvService {
       {
         id: 1,
         name: 'Live CCTV Feed',
-        location: 'Main Location',
-        poleId: 'SP-Main',
+        location: 'Qlux Smart Pole SP-001',
+        poleId: 'SP-001',
+        projectId: null, // Assigned to Qlux Device or All
+        projectName: 'Qlux Device',
         isOnline: true,
         resolution: '1080p HD',
         fps: 30,

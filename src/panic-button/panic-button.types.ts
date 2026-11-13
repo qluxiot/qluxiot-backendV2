@@ -2,6 +2,8 @@ export interface PanicButtonDevice {
   id: number;
   name: string;
   poleId: string;
+  projectId?: number | null;
+  projectName?: string;
   serialNumber: string;
   ipAddress: string;
   macAddress: string;

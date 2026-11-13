@@ -18,10 +18,12 @@ export class PanicButtonService implements OnModuleInit, OnModuleDestroy {
     id: 1,
     name: 'Panic Button PB-01',
     poleId: 'SP-001',
+    projectId: null,
+    projectName: 'Qlux Device',
     serialNumber: this.SERIAL_NUMBER,
     ipAddress: this.DEVICE_IP,
     macAddress: this.MAC_ADDRESS,
-    location: 'Smart Pole 01 (Bertam / Local Lab)',
+    location: 'Qlux Smart Pole SP-001',
     status: 'standby',
     isOnline: true,
     battery: 100, // Powered directly via 12V DC
