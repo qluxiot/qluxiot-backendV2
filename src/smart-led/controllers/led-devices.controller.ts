@@ -45,6 +45,11 @@ export class LedDevicesController {
     return this.historyService.getHistoryByDate(serial, dateStr);
   }
 
+  @Get(':serial/active-dates')
+  async getActiveDates(@Param('serial') serial: string) {
+    return this.historyService.getActiveDates(serial);
+  }
+
   @Post(':serial/bind-gateway')
   bindGateway(
     @Param('serial') serial: string,

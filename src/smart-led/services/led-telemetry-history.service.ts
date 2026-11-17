@@ -39,4 +39,16 @@ export class LedTelemetryHistoryService {
       .orderBy('history.created_datetime', 'ASC')
       .getMany();
   }
+
+  async getActiveDates(serial: string): Promise<string[]> {
+    const raw = await this.historyRepository.createQueryBuilder('history')
+      .select('TO_CHAR(history.created_datetime AT TIME ZONE \'UTC\' AT TIME ZONE \'Asia/Kuala_Lumpur\', \'YYYY-MM-DD\')', 'date')
+      .where('history.serial = :serial', { serial })
+      .groupBy('date')
+      .having('COUNT(DISTINCT history.timestamp) >= 2')
+      .orderBy('date', 'ASC')
+      .getRawMany();
+
+    return raw.map(r => r.date).filter(Boolean);
+  }
 }

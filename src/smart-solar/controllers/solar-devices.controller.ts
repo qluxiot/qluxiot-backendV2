@@ -60,6 +60,11 @@ export class SolarDevicesController {
     return this.historyService.getHistoryByDate(serial, date);
   }
 
+  @Get(':serial/active-dates')
+  getActiveDates(@Param('serial') serial: string) {
+    return this.historyService.getActiveDates(serial);
+  }
+
   @Post(':serial/bind-gateway')
   bindGateway(
     @Param('serial') serial: string,

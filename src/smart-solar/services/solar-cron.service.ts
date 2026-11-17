@@ -160,7 +160,26 @@ export class SolarCronService {
               device.signal_strength = cloudBasic.signal_strength;
             }
 
-            // Force hardware update
+            // ── Handle Offline Devices Immediately ──
+            // If the device is offline, trigger the offline alarm reliably right here.
+            // There is no need to call updateDeviceStatus or getDeviceStatus on a dead/disconnected light.
+            if (device.is_online === 0) {
+              await this.deviceRepo.save(device);
+              const isGateway = device.device_type === 'Gateway' || (device.name && device.name.toLowerCase().includes('gateway'));
+              const alarm = await this.alarmsService.triggerAlarm({
+                serial: device.serial,
+                name: device.name,
+                device_type: 'solar',
+                warning_information: isGateway ? '网关离线' : '设备离线',
+                english: isGateway ? 'Gateway Offline' : 'Solar Device Offline',
+                project_id: device.project?.id ?? null,
+                skipDispatch: true,
+              });
+              this.logger.warn(`[SOLAR ALARM] ${device.serial} — ${isGateway ? 'Gateway' : 'Solar Device'} Offline`);
+              return alarm ? [alarm.id] : [];
+            }
+
+            // Force hardware update (only for online devices)
             await this.nengjiaService.updateDeviceStatus(device.serial);
 
             // Get the deep telemetry

@@ -27,4 +27,20 @@ export class TelemetryHistoryService {
       },
     });
   }
+
+  async getActiveDates(serial: string): Promise<string[]> {
+    // Only return dates where the device was genuinely ONLINE and actively communicating,
+    // not stale cached data repeatedly recorded by the cron server.
+    const raw = await this.repo.createQueryBuilder('history')
+      .select('TO_CHAR(TO_TIMESTAMP(CAST(history.timestamp AS BIGINT) / 1000.0) AT TIME ZONE \'Asia/Kuala_Lumpur\', \'YYYY-MM-DD\')', 'date')
+      .where('history.serial = :serial', { serial })
+      .andWhere('history.timestamp IS NOT NULL')
+      .andWhere('history.timestamp ~ \'^[0-9]+$\'')
+      .groupBy('date')
+      .having('COUNT(DISTINCT history.timestamp) >= 2')
+      .orderBy('date', 'ASC')
+      .getRawMany();
+
+    return raw.map(r => r.date).filter(Boolean);
+  }
 }
