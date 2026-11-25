@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { EnvironmentalService } from './environmental.service';
 import type { EnvironmentalTelemetry } from './environmental.service';
 import { Public } from '../auth/public.decorator';
@@ -11,5 +11,11 @@ export class EnvironmentalController {
   @Get('live')
   getLive(): EnvironmentalTelemetry {
     return this.envService.getLiveTelemetry();
+  }
+
+  @Public()
+  @Get('history')
+  getHistory(@Query('limit') limit?: string) {
+    return this.envService.getHistory(limit ? parseInt(limit, 10) : 48);
   }
 }

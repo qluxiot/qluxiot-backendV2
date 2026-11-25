@@ -1,6 +1,9 @@
 import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import * as net from 'net';
 import * as mqtt from 'mqtt';
+import { EnvironmentalHistory } from './environmental-history.entity';
 
 export interface EnvironmentalTelemetry {
   timestamp: string;
@@ -24,7 +27,13 @@ export class EnvironmentalService implements OnModuleInit, OnModuleDestroy {
   private socket: net.Socket | null = null;
   private pollInterval: NodeJS.Timeout | null = null;
   private reconnectTimeout: NodeJS.Timeout | null = null;
+  private historyInterval: NodeJS.Timeout | null = null;
   private hivemqClient: mqtt.MqttClient | null = null;
+
+  constructor(
+    @InjectRepository(EnvironmentalHistory)
+    private readonly historyRepo: Repository<EnvironmentalHistory>,
+  ) {}
 
   private latestTelemetry: EnvironmentalTelemetry = {
     timestamp: new Date().toISOString(),
@@ -53,6 +62,11 @@ export class EnvironmentalService implements OnModuleInit, OnModuleDestroy {
     this.initHiveMq();
     this.connectGateway();
     
+    // Save historical snapshot every 30 minutes
+    this.historyInterval = setInterval(() => {
+      void this.saveHistorySnapshot();
+    }, 30 * 60 * 1000);
+
     // Check watchdog every 10 seconds for online/offline status
     setInterval(() => {
       const now = Date.now();
@@ -251,9 +265,40 @@ export class EnvironmentalService implements OnModuleInit, OnModuleDestroy {
     }, 5000);
   }
 
+  async saveHistorySnapshot(): Promise<void> {
+    if (!this.latestTelemetry.isOnline) return;
+    try {
+      const record = this.historyRepo.create({
+        temperature: this.latestTelemetry.temperature,
+        humidity: this.latestTelemetry.humidity,
+        pm25: this.latestTelemetry.pm25,
+        pm10: this.latestTelemetry.pm10,
+        noise: this.latestTelemetry.noise,
+        pressure: this.latestTelemetry.pressure,
+        windSpeed: this.latestTelemetry.windSpeed,
+        windDirection: this.latestTelemetry.windDirection,
+        co2: this.latestTelemetry.co2,
+      });
+      await this.historyRepo.save(record);
+      this.logger.log('Saved 30-minute environmental history snapshot');
+    } catch (err) {
+      this.logger.error(`Failed to save history snapshot: ${err}`);
+    }
+  }
+
+  async getHistory(limit = 48): Promise<EnvironmentalHistory[]> {
+    const safeLimit = Math.min(Math.max(limit || 48, 1), 200);
+    const rows = await this.historyRepo.find({
+      order: { recordedAt: 'DESC' },
+      take: safeLimit,
+    });
+    return rows.reverse();
+  }
+
   private cleanup() {
     if (this.pollInterval) clearInterval(this.pollInterval);
     if (this.reconnectTimeout) clearTimeout(this.reconnectTimeout);
+    if (this.historyInterval) clearInterval(this.historyInterval);
     if (this.socket) {
       this.socket.destroy();
       this.socket = null;
