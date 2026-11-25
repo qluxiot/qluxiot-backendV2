@@ -1,6 +1,6 @@
 import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import * as net from 'net';
 import * as mqtt from 'mqtt';
 import { EnvironmentalHistory } from './environmental-history.entity';
@@ -286,7 +286,17 @@ export class EnvironmentalService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  async getHistory(limit = 48): Promise<EnvironmentalHistory[]> {
+  async getHistory(limit = 48, date?: string): Promise<EnvironmentalHistory[]> {
+    if (date) {
+      const start = new Date(`${date}T00:00:00.000`);
+      const end = new Date(`${date}T23:59:59.999`);
+      if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
+        return this.historyRepo.find({
+          where: { recordedAt: Between(start, end) },
+          order: { recordedAt: 'ASC' },
+        });
+      }
+    }
     const safeLimit = Math.min(Math.max(limit || 48, 1), 200);
     const rows = await this.historyRepo.find({
       order: { recordedAt: 'DESC' },

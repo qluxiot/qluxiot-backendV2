@@ -15,7 +15,7 @@ export class EnvironmentalController {
 
   @Public()
   @Get('history')
-  getHistory(@Query('limit') limit?: string) {
-    return this.envService.getHistory(limit ? parseInt(limit, 10) : 48);
+  getHistory(@Query('limit') limit?: string, @Query('date') date?: string) {
+    return this.envService.getHistory(limit ? parseInt(limit, 10) : 48, date);
   }
 }
