@@ -288,8 +288,8 @@ export class EnvironmentalService implements OnModuleInit, OnModuleDestroy {
 
   async getHistory(limit = 48, date?: string): Promise<EnvironmentalHistory[]> {
     if (date) {
-      const start = new Date(`${date}T00:00:00.000`);
-      const end = new Date(`${date}T23:59:59.999`);
+      const start = new Date(`${date}T00:00:00.000+08:00`);
+      const end = new Date(`${date}T23:59:59.999+08:00`);
       if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
         return this.historyRepo.find({
           where: { recordedAt: Between(start, end) },
